@@ -25,7 +25,7 @@ namespace TaskManager
             services.AddDbManagers();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddCookie(options => options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Login/Login"));
+                    .AddCookie(options => options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login"));
 
             services.AddAuthorization(authOptions =>
             {

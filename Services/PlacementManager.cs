@@ -18,6 +18,11 @@ namespace TaskManager.Services
         }
 
         public async Task<IEnumerable<Placement>> GetPlacementAsync()
-            => await placementDb.Find(FilterDefinition<Placement>.Empty).ToListAsync();
+        {
+            var filter = Builders<Placement>.Filter.Empty;
+
+            return await placementDb.Find(filter)
+                                    .ToListAsync();
+        }
     }
 }

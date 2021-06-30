@@ -4,7 +4,7 @@
 @model TaskManager.ViewModels.RegisterViewModel
 
 <div class='container pb-5 w-50'>
-    <form method="post" asp-controller="Register" asp-action="Register">
+    <form method="post" asp-controller="Account" asp-action="Register">
         <div asp-validation-summary="ModelOnly"></div>
         <h3 class="form-text mb-4">Регистрация пользователя</h3>
 
@@ -44,7 +44,7 @@
                     <button type='submit' class='btn btn-block btn-primary btn-md'>Зарегистирироваться</button>
                 </div>
                 <div class="col-md-6">
-                    <a class='btn btn-block btn-outline-primary btn-md' asp-controller="Login" asp-action="Login">Вернуться</a>
+                    <a class='btn btn-block btn-outline-primary btn-md' asp-controller="Account" asp-action="Login">Вернуться</a>
                 </div>
             </div>
         </div>

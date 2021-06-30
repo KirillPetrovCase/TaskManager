@@ -17,5 +17,12 @@ namespace TaskManager.Services
         }
 
         public async Task CreateAsync(User user) => await userDb.InsertOneAsync(user);
+
+        public async Task<User> GetUserByUserNameAsync(string userName)
+        {
+            var filter = Builders<User>.Filter.Where(user => user.UserName == userName);
+
+            return await userDb.Find(filter).FirstOrDefaultAsync();
+        }
     }
 }

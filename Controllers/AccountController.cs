@@ -12,21 +12,43 @@ using TaskManager.ViewModels;
 
 namespace TaskManager.Controllers
 {
-    public class RegisterController : Controller
+    public class AccountController : Controller
     {
-        private readonly UserManager userDb;
         private readonly PlacementManager placementsDb;
+        private readonly UserManager userDb;
 
-        public RegisterController(UserManager userDb, PlacementManager placementDb)
+        public AccountController(UserManager userDb, PlacementManager placementDb)
         {
             this.userDb = userDb;
             this.placementsDb = placementDb;
         }
 
         [HttpGet]
+        public IActionResult Login() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userDb.GetUserByUserNameAsync(model.UserName);
+
+                if (user is not null && SecurePasswordHasher.Verify(model.Password, user.HashPassword) is true)
+                {
+                    await AuthenticateAsync(user);
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError(string.Empty, "Не удаётся войти. Пожалуйста, проверьте правильность написания логина и пароля.");
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Register()
         {
-            ViewBag.Placements = await GetSelectListAsync(placementsDb);
+            ViewBag.Placements = await GetPlacementsAsync(placementsDb);
             return View();
         }
 
@@ -52,19 +74,30 @@ namespace TaskManager.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.Placements = await GetSelectListAsync(placementsDb);
+            ViewBag.Placements = await GetPlacementsAsync(placementsDb);
             return View(model);
         }
 
-        private static async Task<SelectList> GetSelectListAsync(PlacementManager manager) => new SelectList(await manager.GetPlacementAsync(), "Name", "Name");
+        private static async Task<SelectList> GetPlacementsAsync(PlacementManager manager) => new SelectList(await manager.GetPlacementAsync(), "Name", "Name");
 
-        public async Task AuthenticateAsync(User user)
+        private async Task AuthenticateAsync(User user)
         {
-            var claims = new List<Claim> { new Claim("Role", user.Role.ToString()) };
+            var claims = new List<Claim>
+            {
+                new Claim("Name", user.UserName),
+                new Claim("Role", user.Role.ToString())
+            };
 
             ClaimsIdentity id = new(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
