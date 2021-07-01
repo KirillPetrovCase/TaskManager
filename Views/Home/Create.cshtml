@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Создать задачу";
+}
+@model TaskManager.ViewModels.OrderViewModel
+
+<div class='container pb-5 w-50'>
+    <form method="post" asp-controller="Home" asp-action="Create">
+        <h3 class="form-text mb-4">Создание задачи</h3>
+        <div class='form-group'>
+            <label asp-for="Description"></label>
+            <textarea class='form-control' asp-for="Description"></textarea>
+            <span asp-validation-for="Description" class="text-info"></span>
+        </div>
+        <div class='form-group'>
+            <label asp-for="DeadLine"></label>
+            <input class='form-control' asp-for="DeadLine">
+            <span asp-validation-for="DeadLine" class="text-info"></span>
+        </div>
+        <div asp-validation-summary="ModelOnly" class="text-info"></div>
+        <div class='form-group'>
+            <div class="row">
+                <div class="col-md-6">
+                    <button type='submit' class='btn btn-block btn-primary btn-md'>Создать</button>
+                </div>
+                <div class="col-md-6">
+                    <a class='btn btn-block btn-outline-primary btn-md' asp-controller="Home" asp-action="Index">Вернуться</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -16,8 +16,9 @@ namespace TaskManager.Models
         public string Message { get; set; }
         public DateTime RegisterTime { get; set; }
         public DateTime Deadline { get; set; }
-        public User Author { get; set; }
-        public User Performer { get; set; }
+        public string AuthorId { get; set; }
+        public string PerformerId { get; set; }
         public bool Expired => DateTime.Compare(DateTime.Now, Deadline) == 1;
+        public int LeftDays => (DateTime.Now - Deadline).Days;
     }
 }

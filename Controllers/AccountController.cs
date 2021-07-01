@@ -56,6 +56,7 @@ namespace TaskManager.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid is true)
@@ -96,6 +97,7 @@ namespace TaskManager.Controllers
         {
             return new List<Claim>
             {
+                new Claim("id", user.Id),
                 new Claim("UserName", user.UserName),
                 new Claim("Name", user.Name),
                 new Claim("Role", user.Role.ToString())

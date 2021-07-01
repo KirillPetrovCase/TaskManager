@@ -3,8 +3,8 @@
 }
 @model IEnumerable<Order>
 
-<a asp-action="CreateOrder">Создать заявку</a>
-
+<a asp-action="Create">Создать заявку</a>
+<div class="container">
 @if (Model is not null)
 {
     foreach (var order in Model)
@@ -12,3 +12,4 @@
         <partial name="_showOrder" model="order" />
     }
 }
+</div>
