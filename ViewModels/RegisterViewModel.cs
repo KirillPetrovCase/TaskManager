@@ -25,7 +25,7 @@ namespace TaskManager.ViewModels
 
         [Required(ErrorMessage = "Обязательное поле")]
         [DataType(DataType.Password)]
-        [MinLength(6, ErrorMessage = "Минимальная длина пароля 6 символов")]
+        [MinLength(5, ErrorMessage = "Минимальная длина пароля 5 символов")]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
 

@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using TaskManager.Extensions;
+using TaskManager.Data.Enums;
+using TaskManager.Data.MongoDb;
 using TaskManager.Models;
 using TaskManager.Services;
 using TaskManager.ViewModels;
@@ -14,13 +15,14 @@ namespace TaskManager.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly PlacementManager placementsDb;
-        private readonly UserManager userDb;
+        private readonly MongoDbPlacementRepository placementRepository;
+        private readonly MongoDbUserRepository userRepository;
 
-        public AccountController(UserManager userDb, PlacementManager placementDb)
+        public AccountController(MongoDbPlacementRepository placementRepository,
+                                 MongoDbUserRepository userRepository)
         {
-            this.userDb = userDb;
-            this.placementsDb = placementDb;
+            this.placementRepository = placementRepository;
+            this.userRepository = userRepository;
         }
 
         [HttpGet]
@@ -31,15 +33,16 @@ namespace TaskManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await userDb.GetUserByUserNameAsync(model.UserName);
+                var user = await userRepository.GetByUserName(model.UserName);
 
-                if (user is not null && SecurePasswordHasher.Verify(model.Password, user.HashPassword) is true)
+                if (user is not null && SecurePasswordHasherService.Verify(model.Password, user.HashPassword) is true)
                 {
                     await AuthenticateAsync(user);
                     return RedirectToAction("Index", "Home");
                 }
 
-                ModelState.AddModelError(string.Empty, "Не удаётся войти. Пожалуйста, проверьте правильность написания логина и пароля.");
+                ModelState.AddModelError(string.Empty,
+                                         "Не удаётся войти. Пожалуйста, проверьте правильность написания логина и пароля.");
             }
 
             return View(model);
@@ -48,7 +51,7 @@ namespace TaskManager.Controllers
         [HttpGet]
         public async Task<IActionResult> Register()
         {
-            ViewBag.Placements = await GetPlacementsAsync(placementsDb);
+            ViewBag.Placements = await GetPlacementsAsync();
             return View();
         }
 
@@ -57,40 +60,27 @@ namespace TaskManager.Controllers
         {
             if (ModelState.IsValid is true)
             {
-                User user = new()
-                {
-                    Name = model.Name,
-                    UserName = model.UserName,
-                    HashPassword = SecurePasswordHasher.Hash(model.Password),
-                    Role = Roles.User,
-                    Post = model.Post,
-                    Placement = model.Placement,
-                    Orders = null
-                };
-
-                await userDb.CreateAsync(user);
+                User user = CreateUserFromModel(model);
+                await userRepository.Add(user);
                 await AuthenticateAsync(user);
 
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewBag.Placements = await GetPlacementsAsync(placementsDb);
+            ViewBag.Placements = await GetPlacementsAsync();
             return View(model);
         }
 
-        private static async Task<SelectList> GetPlacementsAsync(PlacementManager manager) => new SelectList(await manager.GetPlacementAsync(), "Name", "Name");
-
         private async Task AuthenticateAsync(User user)
         {
-            var claims = new List<Claim>
-            {
-                new Claim("Name", user.UserName),
-                new Claim("Role", user.Role.ToString())
-            };
+            var claims = GetClaims(user);
+            ClaimsIdentity id = new(claims,
+                                    "ApplicationCookie",
+                                    ClaimsIdentity.DefaultNameClaimType,
+                                    ClaimsIdentity.DefaultRoleClaimType);
 
-            ClaimsIdentity id = new(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                                          new ClaimsPrincipal(id));
         }
 
         public async Task<IActionResult> LogOut()
@@ -98,6 +88,32 @@ namespace TaskManager.Controllers
             await HttpContext.SignOutAsync();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        private async Task<SelectList> GetPlacementsAsync() => new SelectList(await placementRepository.GetAll(), "Name", "Name");
+
+        private static List<Claim> GetClaims(User user)
+        {
+            return new List<Claim>
+            {
+                new Claim("UserName", user.UserName),
+                new Claim("Name", user.Name),
+                new Claim("Role", user.Role.ToString())
+            };
+        }
+
+        private static User CreateUserFromModel(RegisterViewModel model)
+        {
+            return new()
+            {
+                Name = model.Name,
+                UserName = model.UserName,
+                HashPassword = SecurePasswordHasherService.Hash(model.Password),
+                Role = Roles.User,
+                Post = model.Post,
+                Placement = model.Placement,
+                Orders = null
+            };
         }
     }
 }

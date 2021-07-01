@@ -1,4 +1,4 @@
-﻿namespace TaskManager.Models
+﻿namespace TaskManager.Data.Enums
 {
     public enum OrderStatus
     {

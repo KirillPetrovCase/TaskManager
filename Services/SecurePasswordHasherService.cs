@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace TaskManager.Extensions
+namespace TaskManager.Services
 {
-    public static class SecurePasswordHasher
+    public static class SecurePasswordHasherService
     {
         private const int SaltSize = 16;
         private const int HashSize = 20;

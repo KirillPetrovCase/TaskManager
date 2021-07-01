@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TaskManager.Services;
+using TaskManager.Data.MongoDb;
 
 namespace TaskManager.Extensions
 {
@@ -7,9 +7,9 @@ namespace TaskManager.Extensions
     {
         public static void AddDbManagers(this IServiceCollection services)
         {
-            services.AddTransient<OrderManager>();
-            services.AddTransient<UserManager>();
-            services.AddTransient<PlacementManager>();
+            services.AddScoped<MongoDbUserRepository>();
+            services.AddScoped<MongoDbOrderRepository>();
+            services.AddScoped<MongoDbPlacementRepository>();
         }
     }
 }

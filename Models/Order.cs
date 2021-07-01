@@ -1,10 +1,12 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
+using TaskManager.Data;
+using TaskManager.Data.Enums;
 
 namespace TaskManager.Models
 {
-    public class Order
+    public class Order : IEntity
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
