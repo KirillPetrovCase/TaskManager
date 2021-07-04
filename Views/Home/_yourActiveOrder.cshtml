@@ -1,0 +1,64 @@
+﻿@model TaskManager.ViewModels.ShowOrderViewModel
+
+<div class="card my-1">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-8">
+                <div class="text-left">
+                    <span class="badge bg-secondary text-light text-monospace">id: @Model.OrderId</span>
+                </div>
+                <div class="text-left">
+                    <span class="badge badge-info">
+                        Автор: @Model.AuthorName
+                    </span>
+                    <span class="badge badge-info">
+                        Время создания: @Model.RegisterDate.ToShortDateString()
+                    </span>
+                    <span class="badge badge-info">
+                        Срок: @Model.DeadLine.ToShortDateString()
+                    </span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="text-right">
+                    <span class="badge bg-success text-light text-monospace">Статус: @Model.Status</span>
+                </div>
+                @if (Model.PerformerId is not null)
+                {
+                    <div class="text-right">
+                        <span class="badge bg-dark text-light text-monospace">Исполнитель: @Model.PerformerId</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+<div class="card-body">
+    <div class="row">
+        <div class="col">
+            <p class="font-weight-light">
+                @Model.Description
+            </p>
+        </div>
+    </div>
+</div>
+<div class="card-footer">
+    <div class="row">
+        <div class="col">
+            <button type="button" class='btn btn-outline-danger btn-block btn-sm'>
+                Отказаться от выполнения
+            </button>
+        </div>
+        <div class="col">
+            <a class='btn btn-outline-secondary btn-block btn-sm' asp-action="Message" asp-controller="Home">
+                Написать пользователю
+            </a>
+        </div>
+        <div class="col">
+            <button type="button" class='btn btn-primary btn-block btn-sm'>
+                Закрыть заявку
+            </button>
+        </div>
+    </div>
+</div>
+</div>

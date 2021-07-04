@@ -52,6 +52,7 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> Register()
         {
             ViewBag.Placements = await GetPlacementsAsync();
+
             return View();
         }
 
@@ -69,6 +70,7 @@ namespace TaskManager.Controllers
             }
 
             ViewBag.Placements = await GetPlacementsAsync();
+
             return View(model);
         }
 

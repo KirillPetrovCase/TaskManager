@@ -6,7 +6,7 @@ using TaskManager.Data.Enums;
 
 namespace TaskManager.Models
 {
-    public class User : IEntity
+    public class User : IDocument
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }

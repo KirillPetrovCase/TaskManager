@@ -1,15 +1,45 @@
 ﻿@{
     ViewData["Title"] = "Главная";
 }
-@model IEnumerable<Order>
+@model TaskManager.ViewModels.ActiveOrdersViewModel
 
-<a asp-action="Create">Создать заявку</a>
 <div class="container">
-@if (Model is not null)
-{
-    foreach (var order in Model)
-    {
-        <partial name="_showOrder" model="order" />
-    }
-}
+    <div class="row my-3">
+        <div class="col"></div>
+        <div class="col-4">
+            <a class='btn btn-primary btn-block btn-sm' asp-action="Create" asp-controller="Home">
+                Создать заявку
+            </a>
+        </div>
+        <div class="col"></div>
+    </div>
+    <div class="row my-3">
+        <div class="col-12 text-center">
+            <h3>Панель заявок</h3>
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="p-3 mb-2 bg-secondary text-white rounded">
+                Взятые заявки
+            </div>
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-12">
+            <partial name="_yourActiveOrders" model="Model.YourActiveOrders" />
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="p-3 mb-2 bg-secondary text-white rounded">
+                Все заявки
+            </div>
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-12">
+            <partial name="_otherActiveOrders" model="Model.OtherActiveOrders" />
+        </div>
+    </div>
 </div>

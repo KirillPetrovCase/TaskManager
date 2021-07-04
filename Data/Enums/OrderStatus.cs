@@ -2,11 +2,10 @@
 {
     public enum OrderStatus
     {
+        Approved,
         Awaiting,
         Cancelled,
         Completed,
-        Expired,
-        Received,
-        Refunded
+        Performing
     }
 }

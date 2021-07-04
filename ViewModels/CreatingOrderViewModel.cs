@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TaskManager.ViewModels
 {
-    public class OrderViewModel
+    public class CreatingOrderViewModel
     {
         [Required]
         [Display(Name = "Описание проблемы")]

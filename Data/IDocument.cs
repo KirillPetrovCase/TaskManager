@@ -1,6 +1,6 @@
 ﻿namespace TaskManager.Data
 {
-    public interface IEntity
+    public interface IDocument
     {
         public string Id { get; set; }
     }

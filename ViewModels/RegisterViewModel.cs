@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using TaskManager.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using TaskManager.Data.DataAnnotations;
 
 namespace TaskManager.ViewModels
 {
@@ -9,6 +7,7 @@ namespace TaskManager.ViewModels
     {
         [Required(ErrorMessage = "Обязательное поле")]
         [Display(Name = "Логин")]
+        [NotReserved (ErrorMessage = "Этот логин зарезервирован")]
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Обязательное поле")]
