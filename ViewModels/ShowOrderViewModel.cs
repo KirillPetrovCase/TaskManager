@@ -14,5 +14,6 @@ namespace TaskManager.ViewModels
         public string AuthorId { get; set; }
         public string PerformerId { get; set; }
         public string AuthorName { get; set; }
+        public string OptionsViewName { get; set; }
     }
 }

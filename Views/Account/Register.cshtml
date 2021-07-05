@@ -3,50 +3,58 @@
 }
 @model TaskManager.ViewModels.RegisterViewModel
 
-<div class='container pb-5 w-50'>
-    <form method="post" asp-controller="Account" asp-action="Register">
-        <div asp-validation-summary="ModelOnly"></div>
-        <h3 class="form-text mb-4">Регистрация пользователя</h3>
+<div class="container p-5">
+    <div class="row">
+        <div class="col-4"></div>
 
-        <div class='form-group'>
-            <label asp-for="UserName"></label>
-            <input class='form-control' asp-for="UserName">
-            <span asp-validation-for="UserName" class="text-info"></span>
-        </div>
-        <div class='form-group'>
-            <label asp-for="Name"></label>
-            <input class='form-control' asp-for="Name">
-            <span asp-validation-for="Name" class="text-info"></span>
-        </div>
-        <div class='form-group'>
-            <label asp-for="Post"></label>
-            <input class='form-control' asp-for="Post">
-            <span asp-validation-for="Post" class="text-info"></span>
-        </div>
-        <div class='form-group'>
-            <label asp-for="Placement"></label>
-            <select class='form-control' asp-for="Placement" asp-items="ViewBag.Placements"></select>
-            <span asp-validation-for="Placement" class="text-info"></span>
-        </div>
-        <div class='form-group'>
-            <label asp-for="Password"></label>
-            <input class='form-control' asp-for="Password">
-            <span asp-validation-for="Password" class="text-info"></span>
-        </div>
-        <div class='form-group'>
-            <label asp-for="ConfirmPassword"></label>
-            <input class='form-control' asp-for="ConfirmPassword">
-            <span asp-validation-for="ConfirmPassword" class="text-info"></span>
-        </div>
-        <div class='form-group'>
-            <div class="row">
-                <div class="col-md-6">
-                    <button type='submit' class='btn btn-block btn-primary btn-md'>Зарегистирироваться</button>
+        <div class="col">
+            <p class="lead text-center">Регистрация пользователя</p>
+            <form method="post" asp-controller="Account" asp-action="Register">
+                <div class='form-group mt-2'>
+                    <label asp-for="UserName"></label>
+                    <input class='form-control' asp-for="UserName">
+                    <span asp-validation-for="UserName" class="text-info"></span>
                 </div>
-                <div class="col-md-6">
-                    <a class='btn btn-block btn-outline-primary btn-md' asp-controller="Account" asp-action="Login">Вернуться</a>
+                <div class='form-group mt-2'>
+                    <label asp-for="Name"></label>
+                    <input class='form-control' asp-for="Name">
+                    <span asp-validation-for="Name" class="text-info"></span>
                 </div>
-            </div>
+                <div class='form-group mt-2'>
+                    <label asp-for="Post"></label>
+                    <input class='form-control' asp-for="Post">
+                    <span asp-validation-for="Post" class="text-info"></span>
+                </div>
+                <div class='form-group mt-2'>
+                    <label asp-for="Placement"></label>
+                    <select class='form-select' asp-for="Placement" asp-items="ViewBag.Placements"></select>
+                    <span asp-validation-for="Placement" class="text-info"></span>
+                </div>
+                <div class='form-group mt-2'>
+                    <label asp-for="Password"></label>
+                    <input class='form-control' asp-for="Password">
+                    <span asp-validation-for="Password" class="text-info"></span>
+                </div>
+                <div class='form-group mt-2'>
+                    <label asp-for="ConfirmPassword"></label>
+                    <input class='form-control' asp-for="ConfirmPassword">
+                    <span asp-validation-for="ConfirmPassword" class="text-info"></span>
+                </div>
+                <div asp-validation-summary="ModelOnly" class="text-info"></div>
+                <div class='form-group mt-4'>
+                    <div class="row">
+                        <div class="col">
+                            <button type='submit' class="btn btn-dark w-100">Зарегистрироваться</button>
+                        </div>
+                        <div class="col ">
+                            <a class='btn btn-outline-dark w-100' asp-controller="Account" asp-action="Login">Вернуться</a>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
         </div>
-    </form>
+
+        <div class="col-4"></div>
+    </div>
 </div>

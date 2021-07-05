@@ -1,0 +1,16 @@
+﻿@model string
+
+<div class="row">
+    <div class="col">
+        <a class="btn btn-info btn-sm w-100 rounded" asp-action="UnsubscribeFromOrder" asp-controller="Admin" asp-route-id="@Model">Отказаться</a>
+    </div>
+    <div class="col">
+        <a class="btn btn-info btn-sm w-100 rounded" asp-action="MessagingToAuthor" asp-controller="Admin" asp-route-id="@Model">Написать</a>
+    </div>
+    <div class="col">
+        <a class="btn btn-danger btn-sm w-100 rounded" asp-action="CancelOrder" asp-controller="Admin" asp-route-id="@Model">Отменить</a>
+    </div>
+    <div class="col">
+        <a class="btn btn-success btn-sm w-100 rounded" asp-action="CompleteOrder" asp-controller="Admin" asp-route-id="@Model">Закрыть</a>
+    </div>
+</div>

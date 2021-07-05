@@ -1,0 +1,48 @@
+﻿@model TaskManager.ViewModels.ShowOrderViewModel
+
+<div>
+    <div class="card border-primary">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-8">
+                    <div class="text-left">
+                        <span class="badge bg-dark text-light text-monospace">id: @Model.OrderId</span>
+                    </div>
+                    <div class="text-left">
+                        <span class="badge bg-light">
+                            Автор: @Model.AuthorName
+                        </span>
+                        <span class="badge bg-light">
+                            Время создания: @Model.RegisterDate.ToShortDateString()
+                        </span>
+                        <span class="badge bg-light">
+                            Срок: @Model.DeadLine.ToShortDateString()
+                        </span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="text-end">
+                        <span class="badge bg-dark text-light text-monospace">Статус: @Model.Status</span>
+                    </div>
+                    @if (Model.PerformerId is not null)
+                    {
+                        <div class="text-end">
+                            <span class="badge bg-dark text-light text-monospace">Исполнитель: @Model.PerformerId</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <p class="card-text">
+                    @Model.Description
+                </p>
+            </div>
+        </div>
+        <div class="card-footer bg-light">
+            <partial name="@Model.OptionsViewName" model="@Model.OrderId"/>
+        </div>
+    </div>
+</div>
+

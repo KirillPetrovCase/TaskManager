@@ -1,9 +1,0 @@
-﻿@model IEnumerable<TaskManager.ViewModels.ShowOrderViewModel>
-
-@if (Model is not null)
-{
-    foreach (var order in Model)
-    {
-        <partial name="_yourActiveOrder" model="order" />
-    }
-}

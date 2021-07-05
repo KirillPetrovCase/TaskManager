@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Главная";
+}
+@model TaskManager.ViewModels.ActiveOrdersViewModel
+
+<div class="container">
+    <div class="row">
+        <p class="lead text-center">Взятые заявки</p>
+        <partial name="_showOrders" model="Model.YourActiveOrders" />
+    </div>
+    <div class="row">
+        <p class="lead text-center">Все заявки</p>
+        <partial name="_showOrders" model="Model.OtherActiveOrders" />
+    </div>
+</div>

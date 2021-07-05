@@ -26,10 +26,14 @@ namespace TaskManager.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var orders = await orderRepository.GetAll();
-            var activeOrders = GetActiveOrdersViewModel(orders);
+            var orders = await orderRepository.GetAllWithFilter("_id", User.FindFirstValue("id"));
 
-            return View(activeOrders);
+            List<ShowOrderViewModel> models = new();
+
+            foreach (var order in orders)
+                models.Add(CreateModelFromOrder(order, "_userOrderOptions").Result);
+
+            return View(models);
         }
 
         [HttpGet]
@@ -60,42 +64,7 @@ namespace TaskManager.Controllers
             };
         }
 
-        public async Task<IActionResult> SubscribeToOrder(string id)
-        {
-            await orderRepository.Update<string>(id, "PerformerId", User.FindFirstValue("id"));
-            await orderRepository.Update<int>(id, "Status", ((int)OrderStatus.Performing));
-            return RedirectToAction("Index");
-        }
-
-        private ActiveOrdersViewModel GetActiveOrdersViewModel(List<Order> orders)
-        {
-            string userId = User.FindFirstValue("id");
-
-            List<ShowOrderViewModel> yourOrders = new();
-            List<ShowOrderViewModel> otherOrders = new();
-
-            foreach (var order in orders)
-            {
-                if (order.PerformerId == userId)
-                {
-                    yourOrders.Add(CreateModelFromOrder(order).Result);
-                }
-                else
-                {
-                    otherOrders.Add(CreateModelFromOrder(order).Result);
-                }
-            }
-
-            ActiveOrdersViewModel model = new()
-            {
-                YourActiveOrders = yourOrders,
-                OtherActiveOrders = otherOrders
-            };
-
-            return model;
-        }
-
-        private async Task<ShowOrderViewModel> CreateModelFromOrder(Order order)
+        private async Task<ShowOrderViewModel> CreateModelFromOrder(Order order, string optionsViewName)
         {
             return new()
             {
@@ -107,7 +76,8 @@ namespace TaskManager.Controllers
                 DeadLine = order.Deadline,
                 Message = order.Message,
                 AuthorId = order.AuthorId,
-                PerformerId = order.PerformerId
+                PerformerId = order.PerformerId,
+                OptionsViewName = optionsViewName
             };
         }
     }

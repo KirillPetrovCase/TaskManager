@@ -26,7 +26,13 @@ namespace TaskManager.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login() => View();
+        public IActionResult Login()
+        {
+            if (User.Identity.IsAuthenticated is true)
+                return RedirectByRole(User.FindFirst("Role").Value);
+
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -38,7 +44,8 @@ namespace TaskManager.Controllers
                 if (user is not null && SecurePasswordHasherService.Verify(model.Password, user.HashPassword) is true)
                 {
                     await AuthenticateAsync(user);
-                    return RedirectToAction("Index", "Home");
+
+                    return RedirectByRole(user.Role.ToString());
                 }
 
                 ModelState.AddModelError(string.Empty,
@@ -66,7 +73,7 @@ namespace TaskManager.Controllers
                 await userRepository.Add(user);
                 await AuthenticateAsync(user);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectByRole(user.Role.ToString());
             }
 
             ViewBag.Placements = await GetPlacementsAsync();
@@ -118,6 +125,14 @@ namespace TaskManager.Controllers
                 Placement = model.Placement,
                 Orders = null
             };
+        }
+
+        private IActionResult RedirectByRole(string roleName)
+        {
+            if (roleName == "Administrator")
+                return RedirectToAction("Index", "Admin");
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

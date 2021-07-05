@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -28,6 +29,9 @@ namespace TaskManager.Data.MongoDb
         public async Task<List<TDocument>> GetAll()
             => await context.Find(Builders<TDocument>.Filter.Empty).ToListAsync();
 
+        public async Task<List<TDocument>> GetAllWithFilter<TFieldValue>(string field, TFieldValue value)
+            => await context.Find(Builders<TDocument>.Filter.Eq(field, value)).ToListAsync();
+
         public async Task<TDocument> Get(string id)
             => await context.Find(Builders<TDocument>.Filter.Where(e => e.Id == id)).FirstOrDefaultAsync();
 
@@ -39,6 +43,9 @@ namespace TaskManager.Data.MongoDb
 
         public async Task Update<TFieldValue>(string id, string field, TFieldValue value)
             => await context.UpdateOneAsync(Builders<TDocument>.Filter.Where(e => e.Id == id), Builders<TDocument>.Update.Set(field, value));
+
+        public async Task Unset(string id, string field)
+            => await context.UpdateOneAsync(Builders<TDocument>.Filter.Where(e => e.Id == id), Builders<TDocument>.Update.Unset(field));
 
         public async Task Update(TDocument entity)
         {
