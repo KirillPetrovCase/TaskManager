@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Чат";
+}
+
+@model Chat
+
+<div class="container">
+    <div class="row border-bottom mb-3">
+        Чат заявки @Model.OrderId
+    </div>
+    <div class="row h-auto">
+        @if (Model.Messages is not null)
+        {
+            foreach (var message in Model.Messages)
+            {
+                <partial name="_chatMessage" model="message" />
+            }
+        }
+    </div>
+    <div class="row">
+        <partial name="_chatInput" />
+    </div>
+</div>

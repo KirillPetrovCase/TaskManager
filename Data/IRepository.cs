@@ -7,7 +7,7 @@ namespace TaskManager.Data
     {
         Task<List<T>> GetAll();
 
-        Task<T> Get(string id);
+        Task<T> GetById(string id);
 
         Task Add(T entity);
 

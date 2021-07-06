@@ -1,0 +1,72 @@
+﻿@model Order
+@inject TaskManager.Data.MongoDb.MongoDbUserRepository userRepository
+
+<div class="row my-2">
+    <div>
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <span class="badge bg-primary">
+                            @Model.Id
+                        </span>
+                        <br />
+                        <span class="badge bg-light">
+                            Автор: @userRepository.GetNameById(@Model.OwnerId)
+                        </span>
+                        <span class="badge bg-light">
+                            Дата регистрации: @Model.RegisterTime.ToShortDateString()
+                        </span>
+                        <span class="badge bg-light">
+                            Срок: @Model.Deadline.ToShortDateString()
+                        </span>
+                    </div>
+                    <div class="col text-end">
+                        @if (Model.PerformerId is not null)
+                        {
+                            <span class="badge bg-primary">
+                                Исполнитель: @userRepository.GetNameById(@Model.PerformerId);
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p>
+                    @Model.Description
+                </p>
+                @if (Model.Status == TaskManager.Data.Enums.OrderStatus.Awaiting)
+                {
+                    <div class="row">
+                        <div class="col-8"></div>
+                        <div class="col">
+                            <a class="btn btn-danger btn-sm w-100" asp-action="DeleteOrder" asp-controller="User" asp-route-id="@Model.Id">
+                                Удалить
+                            </a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+            <div class="row">
+                <div class="col">
+                    <a class="btn btn-info btn-sm w-100" asp-action="Index" asp-controller="Chat" asp-route-id="@Model.Id">
+                        Чат
+                    </a>
+                </div>
+                <div class="col">
+                    <a class="btn btn-danger btn-sm w-100">
+                        Не подтверждать выполнение
+                    </a>
+                </div>
+                <div class="col">
+                    <a class="btn btn-success btn-sm w-100">
+                        Подтвердить выполнение
+                    </a>
+                </div>
+            </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

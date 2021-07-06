@@ -13,13 +13,10 @@ namespace TaskManager.Data.MongoDb
             context = Сontext;
         }
 
-        public async Task<User> GetByUserName(string userName)
-            => await context.Find(Builders<User>.Filter.Where(e => e.UserName == userName)).FirstOrDefaultAsync();
+        public async Task<User> GetByLogin(string userLogin)
+            => await context.Find(Builders<User>.Filter.Where(user => user.Login == userLogin)).FirstOrDefaultAsync();
 
-        public async Task<string> GetNamebyId(string id)
-        {
-            User user = await Get(id);
-            return user.Name;
-        }
+        public string GetNameById(string id)
+            => GetById(id).Result.Name;
     }
 }

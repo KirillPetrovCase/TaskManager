@@ -1,15 +1,34 @@
 ﻿@{
     ViewData["Title"] = "Главная";
 }
-@model TaskManager.ViewModels.ActiveOrdersViewModel
+
+@model TaskManager.ViewModels.AdminOrderViewModel
 
 <div class="container">
-    <div class="row">
-        <p class="lead text-center">Взятые заявки</p>
-        <partial name="_showOrders" model="Model.YourActiveOrders" />
+    <div class="row mb-5">
+        <a class='btn btn-dark btn-sm rounded' asp-action="Archive" asp-controller="Admin">
+            Архив отработанных
+        </a>
     </div>
     <div class="row">
-        <p class="lead text-center">Все заявки</p>
-        <partial name="_showOrders" model="Model.OtherActiveOrders" />
+        <p class="lead text-center">Заявки в работе</p>
+        @foreach (var order in Model.OrdersInWork)
+        {
+            <partial name="_orderAdminView" model="order" />
+        }
+    </div>
+    <div class="row">
+        <p class="lead text-center">Ожидают подтверждения пользователя</p>
+        @foreach (var order in Model.CompletedOrders)
+        {
+            <partial name="_orderCompleted" model="order" />
+        }
+    </div>
+    <div class="row">
+        <p class="lead text-center">Заявки не в работе</p>
+        @foreach (var order in Model.OrdersNotInWork)
+        {
+            <partial name="_orderAdminView" model="order" />
+        }
     </div>
 </div>

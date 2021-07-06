@@ -6,7 +6,7 @@ namespace TaskManager.ViewModels
     {
         [Required(ErrorMessage = "Обязательное поле")]
         [Display(Name = "Логин")]
-        public string UserName { get; set; }
+        public string Login { get; set; }
 
         [Required(ErrorMessage = "Обязательное поле")]
         [DataType(DataType.Password)]

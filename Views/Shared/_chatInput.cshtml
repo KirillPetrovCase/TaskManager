@@ -1,0 +1,10 @@
+﻿@model Message
+
+<form action="sendMessage" method="post">
+    <div class='form-group mt-2'>
+        <label asp-for="MessageText"></label>
+        <textarea rows="10" class='form-control' asp-for="MessageText"></textarea>
+        <span asp-validation-for="MessageText" class="text-info"></span>
+    </div>
+    <button type='submit' class="btn btn-dark w-100">Отправить</button>
+</form>

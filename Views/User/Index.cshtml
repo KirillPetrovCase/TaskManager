@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Главная";
+}
+
+@model IEnumerable<Order>
+
+<div class="container">
+    <div class="row mb-5">
+        <div class="col"></div>
+        <div class="col">
+            <a class='btn btn-outline-info btn-sm w-100 rounded' asp-action="CreateOrder" asp-controller="User">
+                Создать заявку
+            </a>
+        </div>
+        <div class="col"></div>
+    </div>
+    <div class="row">
+        <p class="lead text-center">Ваши заявки</p>
+        @if (Model is not null)
+        {
+            foreach (var order in Model)
+            {
+                <partial name="_orderUserView" model="order" />
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿@model Order
+@inject TaskManager.Data.MongoDb.MongoDbUserRepository userRepository
+
+<div class="row my-2">
+    <div>
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <span class="badge bg-primary">
+                            @Model.Id
+                        </span>
+                        <br />
+                        <span class="badge bg-light">
+                            Автор: @userRepository.GetNameById(@Model.OwnerId)
+                        </span>
+                        <span class="badge bg-light">
+                            Дата регистрации: @Model.RegisterTime.ToShortDateString()
+                        </span>
+                        <span class="badge bg-light">
+                            Срок: @Model.Deadline.ToShortDateString()
+                        </span>
+                    </div>
+                    <div class="col text-end">
+                        @if (Model.PerformerId is not null)
+                        {
+                            <span class="badge bg-primary">
+                                Исполнитель: @userRepository.GetNameById(@Model.PerformerId)
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <a class="btn btn-info btn-sm w-100">
+                            Чат
+                        </a>
+                    </div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

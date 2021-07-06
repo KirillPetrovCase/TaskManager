@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using TaskManager.Data.Enums;
 using TaskManager.Data.MongoDb;
+using TaskManager.Extensions;
 using TaskManager.Models;
 using TaskManager.Services;
 using TaskManager.ViewModels;
@@ -39,7 +39,7 @@ namespace TaskManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await userRepository.GetByUserName(model.UserName);
+                var user = await userRepository.GetByLogin(model.Login);
 
                 if (user is not null && SecurePasswordHasherService.Verify(model.Password, user.HashPassword) is true)
                 {
@@ -69,7 +69,8 @@ namespace TaskManager.Controllers
         {
             if (ModelState.IsValid is true)
             {
-                User user = CreateUserFromModel(model);
+                User user = model.CreateUser();
+
                 await userRepository.Add(user);
                 await AuthenticateAsync(user);
 
@@ -81,9 +82,20 @@ namespace TaskManager.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync();
+
+            return RedirectToAction("Login", "Account");
+        }
+
+        private async Task<SelectList> GetPlacementsAsync()
+            => new(await placementRepository.GetAll(), "Name", "Name");
+
         private async Task AuthenticateAsync(User user)
         {
             var claims = GetClaims(user);
+
             ClaimsIdentity id = new(claims,
                                     "ApplicationCookie",
                                     ClaimsIdentity.DefaultNameClaimType,
@@ -93,46 +105,20 @@ namespace TaskManager.Controllers
                                           new ClaimsPrincipal(id));
         }
 
-        public async Task<IActionResult> LogOut()
-        {
-            await HttpContext.SignOutAsync();
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        private async Task<SelectList> GetPlacementsAsync() => new SelectList(await placementRepository.GetAll(), "Name", "Name");
-
         private static List<Claim> GetClaims(User user)
-        {
-            return new List<Claim>
+            => new()
             {
                 new Claim("id", user.Id),
-                new Claim("UserName", user.UserName),
                 new Claim("Name", user.Name),
                 new Claim("Role", user.Role.ToString())
             };
-        }
-
-        private static User CreateUserFromModel(RegisterViewModel model)
-        {
-            return new()
-            {
-                Name = model.Name,
-                UserName = model.UserName,
-                HashPassword = SecurePasswordHasherService.Hash(model.Password),
-                Role = Roles.User,
-                Post = model.Post,
-                Placement = model.Placement,
-                Orders = null
-            };
-        }
 
         private IActionResult RedirectByRole(string roleName)
         {
             if (roleName == "Administrator")
                 return RedirectToAction("Index", "Admin");
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "User");
         }
     }
 }
