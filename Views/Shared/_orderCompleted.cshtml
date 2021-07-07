@@ -34,8 +34,12 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <a class="btn btn-info btn-sm w-100">
+                        <a class="btn btn-info btn-sm rounded w-100" asp-action="Index" asp-controller="Chat" asp-route-orderId="@Model.Id">
                             Чат
+                            @if (@Model.NewMessageForAdmin)
+                            {
+                                <span class="badge bg-danger rounded">New</span>
+                            }
                         </a>
                     </div>
                     <div class="col"></div>

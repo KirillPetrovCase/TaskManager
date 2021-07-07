@@ -30,21 +30,21 @@ namespace TaskManager.Controllers
         [HttpGet]
         public async Task<IActionResult> Archive() => View();
 
-        public async Task<IActionResult> SubscribeToOrder(string id)
+        public async Task<IActionResult> SubscribeToOrder(string orderId)
         {
-            await orderRepository.SubscribePerformerToOrder(id, User.FindFirstValue("id"));
+            await orderRepository.SubscribePerformerToOrder(orderId, User.FindFirstValue("id"));
             return RedirectToAction("Index", "Admin");
         }
 
-        public async Task<IActionResult> UnsubscribeFromOrder(string id)
+        public async Task<IActionResult> UnsubscribeFromOrder(string orderId)
         {
-            await orderRepository.UnsubscribePerformerFromOrder(id);
+            await orderRepository.UnsubscribePerformerFromOrder(orderId);
             return RedirectToAction("Index", "Admin");
         }
 
-        public async Task<IActionResult> CompleteOrder(string id)
+        public async Task<IActionResult> CompleteOrder(string orderId)
         {
-            await orderRepository.MarkOrderAsCompleted(id);
+            await orderRepository.MarkOrderAsCompleted(orderId);
             return RedirectToAction("Index", "Admin");
         }
     }

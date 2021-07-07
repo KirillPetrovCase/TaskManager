@@ -40,7 +40,7 @@
                     <div class="row">
                         <div class="col-8"></div>
                         <div class="col">
-                            <a class="btn btn-danger btn-sm w-100" asp-action="DeleteOrder" asp-controller="User" asp-route-id="@Model.Id">
+                            <a class="btn btn-danger rounded btn-sm w-100" asp-action="DeleteOrder" asp-controller="User" asp-route-orderId="@Model.Id">
                                 Удалить
                             </a>
                         </div>
@@ -50,17 +50,21 @@
                 {
             <div class="row">
                 <div class="col">
-                    <a class="btn btn-info btn-sm w-100" asp-action="Index" asp-controller="Chat" asp-route-id="@Model.Id">
+                    <a class="btn btn-info btn-sm rounded w-100" asp-action="Index" asp-controller="Chat" asp-route-orderId="@Model.Id">
                         Чат
+                        @if (@Model.NewMessageForUser)
+                        {
+                            <span class="badge bg-danger rounded">New</span>
+                        }
                     </a>
                 </div>
                 <div class="col">
-                    <a class="btn btn-danger btn-sm w-100">
+                    <a class="btn btn-danger btn-sm rounded w-100" asp-action="ConfirmOrder" asp-controller="User" asp-route-orderId="@Model.Id">
                         Не подтверждать выполнение
                     </a>
                 </div>
                 <div class="col">
-                    <a class="btn btn-success btn-sm w-100">
+                    <a class="btn btn-success btn-sm rounded w-100" asp-action="DeclineOrder" asp-controller="User" asp-route-orderId="@Model.Id">
                         Подтвердить выполнение
                     </a>
                 </div>

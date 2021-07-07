@@ -2,22 +2,26 @@
     ViewData["Title"] = "Чат";
 }
 
-@model Chat
+@model TaskManager.ViewModels.ChatViewModel
 
 <div class="container">
     <div class="row border-bottom mb-3">
-        Чат заявки @Model.OrderId
+        <p>
+            Чат заявки @Model.Chat.OrderId
+        </p>
     </div>
-    <div class="row h-auto">
-        @if (Model.Messages is not null)
-        {
-            foreach (var message in Model.Messages)
+    <div class="row" style="height:550px;">
+        <div class="col h-100 overflow-auto">
+            @if (Model.Chat.Messages is not null)
             {
-                <partial name="_chatMessage" model="message" />
+                foreach (var message in Model.Chat.Messages)
+                {
+                    <partial name="_chatMessage" model="message" />
+                }
             }
-        }
+        </div>
     </div>
     <div class="row">
-        <partial name="_chatInput" />
+        <partial name="_chatInput" model="@Model.SendMessageViewModel" />
     </div>
 </div>

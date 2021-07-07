@@ -31,9 +31,19 @@ namespace TaskManager.Data.MongoDb
         }
 
         public async Task MarkOrderAsCompleted(string orderId)
-        {
-            await Update(orderId, "Status", OrderStatus.Completed);
-        }
+            => await Update(orderId, "Status", OrderStatus.Completed);
+
+        public async Task MarkNewMessageForAdmin(string orderId)
+            => await Update(orderId, "NewMessageForAdmin", true);
+
+        public async Task MarkNewMessageForUser(string orderId)
+            => await Update(orderId, "NewMessageForUser", true);
+
+        public async Task UnmarkNewMessageForAdmin(string orderId)
+             => await Update(orderId, "NewMessageForAdmin", false);
+
+        public async Task UnmarkNewMessageForUser(string orderId)
+            => await Update(orderId, "NewMessageForUser", false);
 
         public async Task<List<Order>> GetAllInWorkByPerformerId(string performerId)
             => await context.Find(Builders<Order>.Filter.Eq("PerformerId", performerId) & Builders<Order>.Filter.Eq("Status", OrderStatus.InWork)).ToListAsync();

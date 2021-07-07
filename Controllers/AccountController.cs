@@ -13,7 +13,7 @@ using TaskManager.ViewModels;
 
 namespace TaskManager.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : ControllerWithRedirect
     {
         private readonly MongoDbPlacementRepository placementRepository;
         private readonly MongoDbUserRepository userRepository;
@@ -112,13 +112,5 @@ namespace TaskManager.Controllers
                 new Claim("Name", user.Name),
                 new Claim("Role", user.Role.ToString())
             };
-
-        private IActionResult RedirectByRole(string roleName)
-        {
-            if (roleName == "Administrator")
-                return RedirectToAction("Index", "Admin");
-
-            return RedirectToAction("Index", "User");
-        }
     }
 }

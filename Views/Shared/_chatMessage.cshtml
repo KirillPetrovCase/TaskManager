@@ -1,15 +1,23 @@
 ﻿@model Message
+@inject TaskManager.Data.MongoDb.MongoDbUserRepository userRepository
 
-<div class="container mb-4">
-    <div class="row border-bottom">
-        <div class="col text-center">
-            @Model.SenderId > @Model.RecipientId
-        </div>
-        <div class="col-4">
-            @Model.Time
-        </div>
-    </div>
+<div class="container mb-5">
     <div class="row">
-        @Model.MessageText
+        <div class="col-2"></div>
+        <div class="col">
+            <div class="row border-bottom border-top">
+                    @userRepository.GetNameById(@Model.SenderId)
+                <div class="col text-end">
+                    @Model.Time.ToString("M")
+                    @Model.Time.ToString("t")
+                </div>
+            </div>
+            <div class="row">
+                <p>
+                    @Model.MessageText
+                </p>
+            </div>
+        </div>
+        <div class="col-2"></div>
     </div>
 </div>

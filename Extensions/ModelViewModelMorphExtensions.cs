@@ -29,5 +29,29 @@ namespace TaskManager.Extensions
                 Placement = model.Placement,
                 Role = Roles.User
             };
+
+        public static ChatViewModel CreateChatViewModel(this Chat chat)
+            => new()
+            {
+                Chat = chat,
+                SendMessageViewModel = new()
+                {
+                    ChatId = chat.Id,
+                    OrderId = chat.OrderId
+                }
+            };
+
+
+        public static ArchiveOrderRecord CreateArchiveOrder(this Order order)
+        => new()
+        {
+            ChatId = order.ChatId,
+            CompleteTime = DateTime.Now,
+            Deadline = order.Deadline,
+            Description = order.Description,
+            OwnerId = order.OwnerId,
+            PerformerId = order.PerformerId,
+            RegisterTime = order.RegisterTime
+        };
     }
 }

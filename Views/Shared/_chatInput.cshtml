@@ -1,10 +1,32 @@
-﻿@model Message
+﻿@model TaskManager.ViewModels.SendMessageViewModel
 
-<form action="sendMessage" method="post">
-    <div class='form-group mt-2'>
-        <label asp-for="MessageText"></label>
-        <textarea rows="10" class='form-control' asp-for="MessageText"></textarea>
-        <span asp-validation-for="MessageText" class="text-info"></span>
-    </div>
-    <button type='submit' class="btn btn-dark w-100">Отправить</button>
-</form>
+
+<div class="container">
+    <form method="post" asp-action="SendMessage" asp-controller="Chat">
+        <div class="row border-top mb-2">
+            <div class="col-3"></div>
+            <div class="col">
+                <input type="hidden" asp-for="ChatId" />
+                <input type="hidden" asp-for="OrderId" />
+                <div class='form-group mt-2'>
+                    <textarea rows="2" class='form-control' style="resize:none;" asp-for="MessageText"></textarea>
+                </div>
+            </div>
+
+            <div class="col-3"></div>
+
+        </div>
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col">
+                <button type='submit' class="btn btn-dark w-100">Отправить</button>
+            </div>
+            <div class="col">
+                <a asp-action="RedirectToIndex" asp-controller="Chat" class="btn btn-outline-dark w-100">Вернуться</a>
+            </div>
+            <div class="col-3"></div>
+        </div>  
+    </form>
+</div>
+
+

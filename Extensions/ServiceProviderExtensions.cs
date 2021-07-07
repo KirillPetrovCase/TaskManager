@@ -7,9 +7,11 @@ namespace TaskManager.Extensions
     {
         public static void AddDbManagers(this IServiceCollection services)
         {
-            services.AddScoped<MongoDbUserRepository>();
+            services.AddScoped<MongoDbArchiveRepository>();
+            services.AddScoped<MongoDbChatRepository>();
             services.AddScoped<MongoDbOrderRepository>();
             services.AddScoped<MongoDbPlacementRepository>();
+            services.AddScoped<MongoDbUserRepository>();
         }
     }
 }
