@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace TaskManager.Controllers
+namespace TaskManager.Controllers.Base
 {
     public abstract class ControllerWithRedirect : Controller
     {

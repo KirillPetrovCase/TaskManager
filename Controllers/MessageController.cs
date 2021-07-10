@@ -3,19 +3,20 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TaskManager.Controllers.Base;
 using TaskManager.Data.MongoDb;
 using TaskManager.Extensions;
 using TaskManager.Models;
-using TaskManager.ViewModels;
+using TaskManager.ViewModels.Message;
 
 namespace TaskManager.Controllers
 {
-    public class ChatController : ControllerWithRedirect
+    public class MessageController : ControllerWithRedirect
     {
         private readonly MongoDbChatRepository chatRepository;
         private readonly MongoDbOrderRepository orderRepository;
 
-        public ChatController(MongoDbChatRepository chatRepository,
+        public MessageController(MongoDbChatRepository chatRepository,
                               MongoDbOrderRepository orderRepository)
         {
             this.chatRepository = chatRepository;
@@ -23,7 +24,7 @@ namespace TaskManager.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string orderId)
+        public async Task<IActionResult> ActiveChat(string orderId)
         {
             var chat = await chatRepository.GetByOrderId(orderId);
 
@@ -44,11 +45,12 @@ namespace TaskManager.Controllers
 
             if (User.FindFirstValue("Role") == "Administrator")
             {
-                await orderRepository.UnmarkNewMessageForUser(orderId);
-            }
-            else
-            {
                 await orderRepository.UnmarkNewMessageForAdmin(orderId);
+            }
+
+            if (User.FindFirstValue("Role") == "User")
+            {
+                await orderRepository.UnmarkNewMessageForUser(orderId);
             }
 
             return View(chat.CreateChatViewModel());
@@ -63,15 +65,28 @@ namespace TaskManager.Controllers
             {
                 await orderRepository.MarkNewMessageForUser(model.OrderId);
             }
-            else
+
+            if (User.FindFirstValue("Role") == "User")
             {
                 await orderRepository.MarkNewMessageForAdmin(model.OrderId);
             }
 
-            return RedirectToAction("Index", "Chat", new { orderId = model.OrderId });
+            return RedirectToAction("ActiveChat", "Message", new { orderId = model.OrderId });
         }
 
-        private Message CreateMessage(string messageText,
+        public async Task<IActionResult> ArchivedChat(string chatId)
+        {
+            var chat = await chatRepository.GetById(chatId);
+
+            if (chat is null)
+            {
+                return RedirectByRole(User.FindFirstValue("Role"));
+            }
+
+            return View(chat.Messages);
+        }
+
+        private static Message CreateMessage(string messageText,
                                       string senderId)
             => new()
             {
@@ -80,7 +95,7 @@ namespace TaskManager.Controllers
                 Time = DateTime.Now
             };
 
-        private Chat CreateEmptyChat(string orderId)
+        private static Chat CreateEmptyChat(string orderId)
             => new()
             {
                 OrderId = orderId,

@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using TaskManager.Data;
-using TaskManager.Data.Enums;
+using TaskManager.Data.Contracts;
 
 namespace TaskManager.Models
 {
@@ -14,6 +14,6 @@ namespace TaskManager.Models
         public string Name { get; set; }
         public string HashPassword { get; set; }
         public string Placement { get; set; }
-        public Roles Role { get; set; }
+        public Role Role { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace TaskManager.ViewModels
+namespace TaskManager.ViewModels.User
 {
     public class CreateOrderViewModel
     {

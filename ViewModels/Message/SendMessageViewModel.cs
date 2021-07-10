@@ -1,4 +1,4 @@
-﻿namespace TaskManager.ViewModels
+﻿namespace TaskManager.ViewModels.Message
 {
     public class SendMessageViewModel
     {

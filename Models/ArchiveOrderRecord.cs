@@ -11,11 +11,13 @@ namespace TaskManager.Models
         public string Id { get; set; }
 
         public string Description { get; set; }
+        public string OwnerName { get; set; }
         public string OwnerId { get; set; }
         public string PerformerId { get; set; }
         public string ChatId { get; set; }
         public DateTime RegisterTime { get; set; }
         public DateTime CompleteTime { get; set; }
+        public DateTime ArchivedTime { get; set; }
         public DateTime Deadline { get; set; }
     }
 }

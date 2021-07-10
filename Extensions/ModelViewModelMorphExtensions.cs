@@ -1,8 +1,10 @@
 ﻿using System;
-using TaskManager.Data.Enums;
+using TaskManager.Data.Contracts;
 using TaskManager.Models;
 using TaskManager.Services;
-using TaskManager.ViewModels;
+using TaskManager.ViewModels.Account;
+using TaskManager.ViewModels.Message;
+using TaskManager.ViewModels.User;
 
 namespace TaskManager.Extensions
 {
@@ -27,7 +29,7 @@ namespace TaskManager.Extensions
                 Name = model.Name,
                 HashPassword = SecurePasswordHasherService.Hash(model.Password),
                 Placement = model.Placement,
-                Role = Roles.User
+                Role = Role.User
             };
 
         public static ChatViewModel CreateChatViewModel(this Chat chat)
@@ -42,13 +44,15 @@ namespace TaskManager.Extensions
             };
 
 
-        public static ArchiveOrderRecord CreateArchiveOrder(this Order order)
+        public static ArchiveOrderRecord CreateArchiveOrder(this Order order, string ownerName)
         => new()
         {
+            ArchivedTime = DateTime.Now,
             ChatId = order.ChatId,
-            CompleteTime = DateTime.Now,
+            CompleteTime = order.CompleteTime,
             Deadline = order.Deadline,
             Description = order.Description,
+            OwnerName = ownerName,
             OwnerId = order.OwnerId,
             PerformerId = order.PerformerId,
             RegisterTime = order.RegisterTime

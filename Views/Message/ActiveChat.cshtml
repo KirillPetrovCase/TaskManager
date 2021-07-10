@@ -2,7 +2,7 @@
     ViewData["Title"] = "Чат";
 }
 
-@model TaskManager.ViewModels.ChatViewModel
+@model TaskManager.ViewModels.Message.ChatViewModel
 
 <div class="container">
     <div class="row border-bottom mb-3">
@@ -16,12 +16,12 @@
             {
                 foreach (var message in Model.Chat.Messages)
                 {
-                    <partial name="_chatMessage" model="message" />
+                    <partial name="Partials/_chatMessage" model="message" />
                 }
             }
         </div>
     </div>
     <div class="row">
-        <partial name="_chatInput" model="@Model.SendMessageViewModel" />
+        <partial name="Partials/_chatInput" model="@Model.SendMessageViewModel" />
     </div>
 </div>

@@ -1,8 +1,8 @@
-﻿@model TaskManager.ViewModels.SendMessageViewModel
+﻿@model TaskManager.ViewModels.Message.SendMessageViewModel
 
 
 <div class="container">
-    <form method="post" asp-action="SendMessage" asp-controller="Chat">
+    <form method="post" asp-action="SendMessage" asp-controller="Message">
         <div class="row border-top mb-2">
             <div class="col-3"></div>
             <div class="col">
@@ -22,7 +22,7 @@
                 <button type='submit' class="btn btn-dark w-100">Отправить</button>
             </div>
             <div class="col">
-                <a asp-action="RedirectToIndex" asp-controller="Chat" class="btn btn-outline-dark w-100">Вернуться</a>
+                <a asp-action="RedirectToIndex" asp-controller="Message" class="btn btn-outline-dark w-100">Вернуться</a>
             </div>
             <div class="col-3"></div>
         </div>  

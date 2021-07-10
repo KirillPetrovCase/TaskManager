@@ -1,7 +1,8 @@
 ﻿using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TaskManager.Data.Enums;
+using TaskManager.Data.Contracts;
 using TaskManager.Models;
 
 namespace TaskManager.Data.MongoDb
@@ -31,7 +32,10 @@ namespace TaskManager.Data.MongoDb
         }
 
         public async Task MarkOrderAsCompleted(string orderId)
-            => await Update(orderId, "Status", OrderStatus.Completed);
+        {
+            await Update(orderId, "CompleteTime", DateTime.Now);
+            await Update(orderId, "Status", OrderStatus.Completed);
+        }
 
         public async Task MarkNewMessageForAdmin(string orderId)
             => await Update(orderId, "NewMessageForAdmin", true);

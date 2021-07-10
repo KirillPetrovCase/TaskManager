@@ -5,11 +5,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TaskManager.Controllers.Base;
 using TaskManager.Data.MongoDb;
 using TaskManager.Extensions;
 using TaskManager.Models;
 using TaskManager.Services;
-using TaskManager.ViewModels;
+using TaskManager.ViewModels.Account;
 
 namespace TaskManager.Controllers
 {

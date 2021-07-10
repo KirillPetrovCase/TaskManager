@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using TaskManager.Data;
-using TaskManager.Data.Enums;
+using TaskManager.Data.Contracts;
 
 namespace TaskManager.Models
 {
@@ -16,6 +16,7 @@ namespace TaskManager.Models
         public string PerformerId { get; set; }
         public string ChatId { get; set; }
         public DateTime RegisterTime { get; set; }
+        public DateTime CompleteTime { get; set; }
         public DateTime Deadline { get; set; }
         public OrderStatus Status { get; set; }
         public bool InWork => Status == OrderStatus.InWork;

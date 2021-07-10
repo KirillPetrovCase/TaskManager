@@ -1,0 +1,93 @@
+﻿@model Order
+@inject TaskManager.Data.MongoDb.MongoDbUserRepository userRepository
+
+<div class="row my-2">
+    <div>
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        @{
+                            string statusText = "";
+
+                            if (Model.Status == TaskManager.Data.Contracts.OrderStatus.Awaiting) statusText = "Ожидает исполнителя";
+                            if (Model.Status == TaskManager.Data.Contracts.OrderStatus.InWork) statusText = "В работе";
+                            if (Model.Status == TaskManager.Data.Contracts.OrderStatus.Completed) statusText = "Завершена, ожидает Вашего подтверждения";
+                        }
+                        <span class="badge bg-primary">
+                            Статус: @statusText
+                        </span>
+                        @if (Model.PerformerId is not null)
+                        {
+                            <span class="badge bg-primary">
+                                Исполнитель: @userRepository.GetNameById(@Model.PerformerId)
+                            </span>
+                        }
+                        <span class="badge bg-light">
+                            Дата регистрации: @Model.RegisterTime.ToShortDateString()
+                        </span>
+                        <span class="badge bg-light">
+                            Срок: @Model.Deadline.ToShortDateString()
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <p>
+                    @Model.Description
+                </p>
+                @if (Model.Status == TaskManager.Data.Contracts.OrderStatus.Awaiting)
+                {
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col-auto">
+                            <a class="btn btn-danger rounded btn-sm" style="width:150px;" asp-action="DeleteOrder" asp-controller="User" asp-route-orderId="@Model.Id">
+                                Удалить
+                            </a>
+                        </div>
+                    </div>
+                }
+                @if (Model.Status == TaskManager.Data.Contracts.OrderStatus.InWork)
+                {
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col-auto">
+                            <a class="btn btn-info btn-sm rounded" style="width:150px;" asp-action="ActiveChat" asp-controller="Message" asp-route-orderId="@Model.Id">
+                                Чат
+                                @if (@Model.NewMessageForUser)
+                                {
+                                    <span class="badge bg-danger rounded">New</span>
+                                }
+                            </a>
+                        </div>
+                    </div>
+                }
+                @if (Model.Status == TaskManager.Data.Contracts.OrderStatus.Completed)
+                {
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-auto">
+                    <a class="btn btn-info btn-sm rounded" style="width:150px;" asp-action="ActiveChat" asp-controller="Message" asp-route-orderId="@Model.Id">
+                        Чат
+                        @if (@Model.NewMessageForUser)
+                        {
+                            <span class="badge bg-danger rounded">New</span>
+                        }
+                    </a>
+                </div>
+                <div class="col-auto">
+                    <a class="btn btn-danger btn-sm rounded" style="width:250px;" asp-action="DeclineOrder" asp-controller="User" asp-route-orderId="@Model.Id">
+                        Не подтверждать выполнение
+                    </a>
+                </div>
+                <div class="col-auto">
+                    <a class="btn btn-success btn-sm rounded" style="width:250px;" asp-action="ConfirmOrder" asp-controller="User" asp-route-orderId="@Model.Id">
+                        Подтвердить выполнение
+                    </a>
+                </div>
+            </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

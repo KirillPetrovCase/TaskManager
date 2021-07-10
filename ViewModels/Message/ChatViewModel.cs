@@ -1,6 +1,6 @@
 ﻿using TaskManager.Models;
 
-namespace TaskManager.ViewModels
+namespace TaskManager.ViewModels.Message
 {
     public class ChatViewModel
     {

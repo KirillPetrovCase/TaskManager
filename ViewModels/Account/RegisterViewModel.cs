@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TaskManager.Data.DataAnnotations;
 
-namespace TaskManager.ViewModels
+namespace TaskManager.ViewModels.Account
 {
     public class RegisterViewModel
     {
         [Required(ErrorMessage = "Обязательное поле")]
         [Display(Name = "Логин")]
-        [NotReserved (ErrorMessage = "Этот логин зарезервирован")]
+        [NotReserved(ErrorMessage = "Этот логин зарезервирован")]
         public string Login { get; set; }
 
         [Required(ErrorMessage = "Обязательное поле")]

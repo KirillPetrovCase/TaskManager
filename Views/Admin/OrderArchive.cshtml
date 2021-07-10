@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Архив заявок";
+}
+
+@model TaskManager.ViewModels.Admin.ArchiveViewModel
+
+<div class="container">
+    <div class="row mb-5">
+        <a class='btn btn-dark btn-sm rounded' asp-action="Index" asp-controller="Admin">
+            Вернуться
+        </a>
+    </div>
+    <div class="row mb-4">
+        <form method="get" asp-action="OrderArchive"
+                           asp-controller="Admin" 
+                           asp-route-page="@(Model.PageViewModel.CurrentPage)"
+                           asp-route-pageSize="@(Model.PageViewModel.PageSize)"
+                           asp-route-sortState="@(Model.SortViewModel.Current)"
+                           asp-route-name="@(Model.FilterViewModel.SelectedName)">
+            <div class="form-group row">
+                
+                <div class="col-2 form-floating">
+                    <input name="name" value="@Model.FilterViewModel.SelectedName" id="UserName" class="form-control" />
+                    <label for="UserName">Имя пользователя</label>
+                </div>
+                <div class="col-2 form-floating">
+                    <input name="pageSize" value="@Model.PageViewModel.PageSize" id="PageSize" class="form-control" />
+                    <label for="PageSize">Значений на странице</label>
+                </div>
+                <div class="col-auto">
+                    <input type="submit" class="btn btn-outline-dark rounded" value="Применить фильтр" />
+                </div>
+                @{
+                    var nameSortActive = Model.SortViewModel.Current == TaskManager.Data.Contracts.SortState.NameAsc ? "btn-outline-info bg-info text-light" : "btn-outline-info";
+                    var dateSortActive = Model.SortViewModel.Current == TaskManager.Data.Contracts.SortState.DateAsc ? "btn-outline-info bg-info text-light" : "btn-outline-info";
+                }
+                <div class="col-auto">
+                    <a asp-action="OrderArchive"
+                       asp-controller="Admin"
+                       asp-route-page="@(Model.PageViewModel.CurrentPage)"
+                       asp-route-pageSize="@(Model.PageViewModel.PageSize)"
+                       asp-route-sortState="@(Model.SortViewModel.NameSort)"
+                       asp-route-name="@(Model.FilterViewModel.SelectedName)"
+                       class="btn @nameSortActive rounded">
+                        Сортировка по заказчику
+                    </a>
+                </div>
+                <div class="col-auto">
+                    <a asp-action="OrderArchive"
+                       asp-controller="Admin"
+                       asp-route-page="@(Model.PageViewModel.CurrentPage)"
+                       asp-route-pageSize="@(Model.PageViewModel.PageSize)"
+                       asp-route-sortState="@(Model.SortViewModel.DateSort)"
+                       asp-route-name="@(Model.FilterViewModel.SelectedName)"
+                       class="btn @dateSortActive rounded">
+                        Сортировка по дате завершения
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <p class="lead text-center">Закрытые заявки</p>
+    </div>
+    <div class="row">
+        @foreach (ArchiveOrderRecord order in Model.Records)
+        {
+            <partial name="Partials/_orderArchive" model="order" />
+        }
+    </div>
+    @{
+        var prevDisabled = Model.PageViewModel.HasPrevious is false ? "disabled" : "";
+        var nextDisabled = Model.PageViewModel.HasNext is false ? "disabled" : "";
+    }
+    <div class="row">
+        <div class="col">
+            <a asp-action="OrderArchive"
+               asp-controller="Admin"
+               asp-route-page="@(Model.PageViewModel.CurrentPage - 1)"
+               asp-route-pageSize="@(Model.PageViewModel.PageSize)"
+               asp-route-name="@(Model.FilterViewModel.SelectedName)"
+               asp-route-sortState="@(Model.SortViewModel.Current)"
+               class="btn  btn-outline-dark w-100 @prevDisabled">
+                Назад
+            </a>
+        </div>
+        <div class="col">
+
+            <a asp-action="OrderArchive"
+               asp-controller="Admin"
+               asp-route-page="@(Model.PageViewModel.CurrentPage + 1)"
+               asp-route-pageSize="@(Model.PageViewModel.PageSize)"
+               asp-route-name="@(Model.FilterViewModel.SelectedName)"
+               asp-route-sortState="@(Model.SortViewModel.Current)"
+               class="btn btn-outline-dark w-100 @nextDisabled">
+                Вперед
+            </a>
+        </div>
+    </div>
+</div>

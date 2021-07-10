@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TaskManager.Controllers.Base;
 using TaskManager.Data.MongoDb;
 using TaskManager.Extensions;
-using TaskManager.ViewModels;
+using TaskManager.ViewModels.User;
 
 namespace TaskManager.Controllers
 {
@@ -49,7 +50,7 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> ConfirmOrder(string orderId)
         {
             var order = await orderRepository.GetById(orderId);
-            await archiveRepository.Add(order.CreateArchiveOrder());
+            await archiveRepository.Add(order.CreateArchiveOrder(User.FindFirstValue("Name")));
 
             return await DeleteOrder(orderId);
         }

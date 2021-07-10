@@ -1,0 +1,49 @@
+﻿@model ArchiveOrderRecord
+@inject TaskManager.Data.MongoDb.MongoDbUserRepository userRepository
+
+<div class="card bg-secondary mb-3 container">
+    <div class="card-header row">
+        <div class="col-auto">
+            Заказчик:
+            <span class="badge bg-info rounded">
+                @Model.OwnerName
+            </span>
+        </div>
+        <div class="col-auto">
+            Исполнитель:
+            <span class="badge bg-info rounded">
+                @userRepository.GetNameById(@Model.PerformerId)
+            </span>
+        </div>
+        <div class="col-auto">
+            <span class="badge bg-dark rounded">
+                Срок: @Model.RegisterTime.ToShortDateString() - @Model.Deadline.ToShortDateString()
+            </span>
+        </div>
+        <div class="col-auto">
+            <span class="badge bg-dark rounded">
+                Завершена: @Model.CompleteTime.ToShortDateString()
+            </span>
+        </div>
+        <div class="col">
+            <span class="badge bg-dark rounded">
+                Подтверждена: @Model.ArchivedTime.ToShortDateString()
+            </span>
+        </div>
+        @if (Model.ChatId is not null)
+        {
+            <div class="col-auto">
+                Чат:
+                <a asp-action="ArchivedChat" asp-controller="Message" asp-route-chatId="@Model.ChatId">
+                    <span class="badge bg-warning rounded">
+                        @Model.ChatId
+                    </span>
+                </a>
+            </div>
+        }
+    </div>
+    <div class="card-body row">
+        @Model.Description
+    </div>
+</div>
+

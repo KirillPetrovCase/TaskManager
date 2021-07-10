@@ -36,7 +36,7 @@ namespace TaskManager.Data.MongoDb
             => await context.InsertOneAsync(entity);
 
         public async Task Delete(string id)
-            => await context.DeleteOneAsync(Builders<TDocument>.Filter.Eq(e => e.Id, id));
+            => await context.DeleteOneAsync(Builders<TDocument>.Filter.Where(e => e.Id == id));
 
         public async Task Update<TFieldValue>(string id, string field, TFieldValue value)
             => await context.UpdateOneAsync(Builders<TDocument>.Filter.Where(e => e.Id == id), Builders<TDocument>.Update.Set(field, value));
