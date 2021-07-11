@@ -5,7 +5,7 @@ using TaskManager.Data.Contracts;
 
 namespace TaskManager.Models
 {
-    public class User : IDocument
+    public class Owner : IDocument
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
@@ -13,6 +13,7 @@ namespace TaskManager.Models
         public string Login { get; set; }
         public string Name { get; set; }
         public string HashPassword { get; set; }
+        public string Post { get; set; }
         public string Placement { get; set; }
         public Role Role { get; set; }
     }

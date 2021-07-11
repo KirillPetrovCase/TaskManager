@@ -26,28 +26,40 @@ namespace TaskManager.Data.MongoDb
             context = (TContext)mongoDatabase.GetCollection<TDocument>(collectionName);
         }
 
-        public async Task<List<TDocument>> GetAll()
+        public long GetCountDocuments()
+            => context.CountDocuments(new BsonDocument());
+
+        public async Task<int> GetCountDocumentsAsync()
+            => (int)await context.CountDocumentsAsync(new BsonDocument());
+
+        public async Task<List<TDocument>> GetAllAsync()
             => await context.Find(Builders<TDocument>.Filter.Empty).ToListAsync();
 
-        public async Task<TDocument> GetById(string id)
+        public async Task<TDocument> GetByIdAsync(string id)
             => await context.Find(Builders<TDocument>.Filter.Where(e => e.Id == id)).FirstOrDefaultAsync();
 
-        public async Task Add(TDocument entity)
-            => await context.InsertOneAsync(entity);
+        public async Task AddAsync(TDocument document)
+            => await context.InsertOneAsync(document);
 
-        public async Task Delete(string id)
-            => await context.DeleteOneAsync(Builders<TDocument>.Filter.Where(e => e.Id == id));
+        public void Add(TDocument document)
+            => context.InsertOne(document);
 
-        public async Task Update<TFieldValue>(string id, string field, TFieldValue value)
-            => await context.UpdateOneAsync(Builders<TDocument>.Filter.Where(e => e.Id == id), Builders<TDocument>.Update.Set(field, value));
+        public void AddMany(IEnumerable<TDocument> documents)
+            => context.InsertMany(documents);
 
-        public async Task Unset(string id, string field)
-            => await context.UpdateOneAsync(Builders<TDocument>.Filter.Where(e => e.Id == id), Builders<TDocument>.Update.Unset(field));
+        public async Task DeleteAsync(string id)
+            => await context.DeleteOneAsync(Builders<TDocument>.Filter.Where(d => d.Id == id));
 
-        public async Task Update(TDocument entity)
+        public async Task UpdateAsync<TFieldValue>(string id, string field, TFieldValue value)
+            => await context.UpdateOneAsync(Builders<TDocument>.Filter.Where(d => d.Id == id), Builders<TDocument>.Update.Set(field, value));
+
+        public async Task UnsetAsync(string id, string field)
+            => await context.UpdateOneAsync(Builders<TDocument>.Filter.Where(d => d.Id == id), Builders<TDocument>.Update.Unset(field));
+
+        public async Task UpdateAsync(TDocument document)
         {
-            await Delete(entity.Id);
-            await Add(entity);
+            await DeleteAsync(document.Id);
+            await AddAsync(document);
         }
     }
 }

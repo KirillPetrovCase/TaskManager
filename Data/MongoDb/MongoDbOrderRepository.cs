@@ -16,46 +16,52 @@ namespace TaskManager.Data.MongoDb
             context = Сontext;
         }
 
-        public async Task<List<Order>> GetAllByOwner(string ownerId)
-            => await context.Find(Builders<Order>.Filter.Eq("OwnerId", ownerId)).ToListAsync();
+        public async Task<IEnumerable<Order>> GetAllByOwnerAsync(string id)
+            => await context.Find(Builders<Order>.Filter.Where(order => order.OwnerId == id)).ToListAsync();
 
-        public async Task SubscribePerformerToOrder(string orderId, string performerId)
+        public async Task<IEnumerable<Order>> GetAllAwaitingsAsync()
+            => await context.Find(Builders<Order>.Filter.Where(order => order.Status == OrderStatus.Awaiting)).ToListAsync();
+
+        public async Task<int> CountAwaitingsAsync()
+            => (int)await context.CountDocumentsAsync(Builders<Order>.Filter.Where(order => order.Status == OrderStatus.Awaiting));
+
+        public async Task<int> CountInWorkByIdAsync(string id)
+            => (int)await context.CountDocumentsAsync(Builders<Order>.Filter.Where(order => order.PerformerId == id && order.Status == OrderStatus.InWork));
+        
+
+        public async Task<IEnumerable<Order>> GetAllInWorkByPerformerAsync(string id)
+            => await context.Find(Builders<Order>.Filter.Where(order => order.PerformerId == id && order.Status == OrderStatus.InWork)).ToListAsync();
+
+        public async Task SubscribePerformerToOrderAsync(string orderId, string performerId, string performerName)
         {
-            await Update(orderId, "PerformerId", performerId);
-            await Update(orderId, "Status", OrderStatus.InWork);
+            await UpdateAsync(orderId, "PerformerId", performerId);
+            await UpdateAsync(orderId, "PerformerName", performerName);
+            await UpdateAsync(orderId, "Status", OrderStatus.InWork);
         }
 
-        public async Task UnsubscribePerformerFromOrder(string orderId)
+        public async Task UnsubscribePerformerFromOrderAsync(string orderId)
         {
-            await Unset(orderId, "PerformerId");
-            await Update(orderId, "Status", OrderStatus.Awaiting);
+            await UnsetAsync(orderId, "PerformerId");
+            await UnsetAsync(orderId, "PerformerName");
+            await UpdateAsync(orderId, "Status", OrderStatus.Awaiting);
         }
 
-        public async Task MarkOrderAsCompleted(string orderId)
+        public async Task MarkOrderAsCompletedAsync(string orderId)
         {
-            await Update(orderId, "CompleteTime", DateTime.Now);
-            await Update(orderId, "Status", OrderStatus.Completed);
+            await UpdateAsync(orderId, "CompleteTime", DateTime.Now);
+            await UpdateAsync(orderId, "Status", OrderStatus.Completed);
         }
 
-        public async Task MarkNewMessageForAdmin(string orderId)
-            => await Update(orderId, "NewMessageForAdmin", true);
+        public async Task MarkNewMessageForAdminAsync(string orderId)
+            => await UpdateAsync(orderId, "NewMessageForAdmin", true);
 
-        public async Task MarkNewMessageForUser(string orderId)
-            => await Update(orderId, "NewMessageForUser", true);
+        public async Task MarkNewMessageForUserAsync(string orderId)
+            => await UpdateAsync(orderId, "NewMessageForUser", true);
 
-        public async Task UnmarkNewMessageForAdmin(string orderId)
-             => await Update(orderId, "NewMessageForAdmin", false);
+        public async Task UnmarkNewMessageForAdminAsync(string orderId)
+             => await UpdateAsync(orderId, "NewMessageForAdmin", false);
 
-        public async Task UnmarkNewMessageForUser(string orderId)
-            => await Update(orderId, "NewMessageForUser", false);
-
-        public async Task<List<Order>> GetAllInWorkByPerformerId(string performerId)
-            => await context.Find(Builders<Order>.Filter.Eq("PerformerId", performerId) & Builders<Order>.Filter.Eq("Status", OrderStatus.InWork)).ToListAsync();
-
-        public async Task<List<Order>> GetAllNotInWork()
-            => await context.Find(Builders<Order>.Filter.Eq("Status", OrderStatus.Awaiting)).ToListAsync();
-
-        public async Task<List<Order>> GetAllComletedWorkByPerformerId(string performerId)
-            => await context.Find(Builders<Order>.Filter.Eq("PerformerId", performerId) & Builders<Order>.Filter.Eq("Status", OrderStatus.Completed)).ToListAsync();
+        public async Task UnmarkNewMessageForUserAsync(string orderId)
+            => await UpdateAsync(orderId, "NewMessageForUser", false);
     }
 }

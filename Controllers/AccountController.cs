@@ -40,7 +40,7 @@ namespace TaskManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await userRepository.GetByLogin(model.Login);
+                var user = await userRepository.GetByLoginAsync(model.Login);
 
                 if (user is not null && SecurePasswordHasherService.Verify(model.Password, user.HashPassword) is true)
                 {
@@ -70,9 +70,9 @@ namespace TaskManager.Controllers
         {
             if (ModelState.IsValid is true)
             {
-                User user = model.CreateUser();
+                Owner user = model.CreateUser();
 
-                await userRepository.Add(user);
+                await userRepository.AddAsync(user);
                 await AuthenticateAsync(user);
 
                 return RedirectByRole(user.Role.ToString());
@@ -91,9 +91,9 @@ namespace TaskManager.Controllers
         }
 
         private async Task<SelectList> GetPlacementsAsync()
-            => new(await placementRepository.GetAll(), "Name", "Name");
+            => new(await placementRepository.GetAllAsync(), "Name", "Name");
 
-        private async Task AuthenticateAsync(User user)
+        private async Task AuthenticateAsync(Owner user)
         {
             var claims = GetClaims(user);
 
@@ -106,7 +106,7 @@ namespace TaskManager.Controllers
                                           new ClaimsPrincipal(id));
         }
 
-        private static List<Claim> GetClaims(User user)
+        private static List<Claim> GetClaims(Owner user)
             => new()
             {
                 new Claim("id", user.Id),

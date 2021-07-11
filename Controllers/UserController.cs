@@ -23,19 +23,26 @@ namespace TaskManager.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Index()
-            => View(await orderRepository.GetAllByOwner(User.FindFirstValue("id")));
+        public async Task<IActionResult> UserOrders()
+            => View(await orderRepository.GetAllByOwnerAsync(User.FindFirstValue("id")));
 
         [HttpGet]
-        public IActionResult CreateOrder() => View();
+        public IActionResult CreateOrder() => View(new CreateOrderViewModel() { Deadline = System.DateTime.Now.Date });
 
         [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderViewModel model)
         {
-            var id = User.FindFirstValue("id");
-            await orderRepository.Add(model.CreateOrder(id));
+            if (ModelState.IsValid is true)
+            {
+                var id = User.FindFirstValue("id");
+                var name = User.FindFirstValue("Name");
 
-            return RedirectByRole(User.FindFirstValue("Role"));
+                await orderRepository.AddAsync(model.CreateOrder(id, name));
+
+                return RedirectToAction("UserOrders");
+            }
+
+            return View(model);
         }
 
         [HttpGet]
@@ -43,22 +50,24 @@ namespace TaskManager.Controllers
 
         public async Task<IActionResult> DeleteOrder(string orderId)
         {
-            await orderRepository.Delete(orderId);
-            return RedirectToAction("Index");
+            await orderRepository.DeleteAsync(orderId);
+
+            return RedirectToAction("UserOrders");
         }
 
         public async Task<IActionResult> ConfirmOrder(string orderId)
         {
-            var order = await orderRepository.GetById(orderId);
-            await archiveRepository.Add(order.CreateArchiveOrder(User.FindFirstValue("Name")));
+            var order = await orderRepository.GetByIdAsync(orderId);
+            await archiveRepository.AddAsync(order.CreateArchiveOrder());
 
             return await DeleteOrder(orderId);
         }
 
         public async Task<IActionResult> DeclineOrder(string orderId)
         {
-            await orderRepository.UnsubscribePerformerFromOrder(orderId);
-            return RedirectToAction("Index");
+            await orderRepository.UnsubscribePerformerFromOrderAsync(orderId);
+
+            return RedirectToAction("UserOrders");
         }
     }
 }

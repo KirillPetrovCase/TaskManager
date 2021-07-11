@@ -1,5 +1,4 @@
 ﻿@model ArchiveOrderRecord
-@inject TaskManager.Data.MongoDb.MongoDbUserRepository userRepository
 
 <div class="card bg-secondary mb-3 container">
     <div class="card-header row">
@@ -12,20 +11,16 @@
         <div class="col-auto">
             Исполнитель:
             <span class="badge bg-info rounded">
-                @userRepository.GetNameById(@Model.PerformerId)
-            </span>
-        </div>
-        <div class="col-auto">
-            <span class="badge bg-dark rounded">
-                Срок: @Model.RegisterTime.ToShortDateString() - @Model.Deadline.ToShortDateString()
-            </span>
-        </div>
-        <div class="col-auto">
-            <span class="badge bg-dark rounded">
-                Завершена: @Model.CompleteTime.ToShortDateString()
+                @Model.PerformerName
             </span>
         </div>
         <div class="col">
+            <span class="badge bg-dark rounded">
+                Срок: @Model.RegisterTime.ToShortDateString() - @Model.Deadline.ToShortDateString()
+            </span>
+            <span class="badge bg-dark rounded">
+                Завершена: @Model.CompleteTime.ToShortDateString()
+            </span>
             <span class="badge bg-dark rounded">
                 Подтверждена: @Model.ArchivedTime.ToShortDateString()
             </span>

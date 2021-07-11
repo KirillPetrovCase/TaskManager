@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using TaskManager.Data.DataAnnotations;
 
 namespace TaskManager.ViewModels.User
 {
@@ -10,6 +11,7 @@ namespace TaskManager.ViewModels.User
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Обязательное поле")]
+        [Deadline(ErrorMessage = "Срок доджен быть корректным")]
         [Display(Name = "Срок")]
         public DateTime Deadline { get; set; }
     }

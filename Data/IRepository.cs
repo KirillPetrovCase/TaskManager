@@ -5,14 +5,14 @@ namespace TaskManager.Data
 {
     public interface IRepository<T> where T : class
     {
-        Task<List<T>> GetAll();
+        Task<List<T>> GetAllAsync();
 
-        Task<T> GetById(string id);
+        Task<T> GetByIdAsync(string id);
 
-        Task Add(T entity);
+        Task AddAsync(T entity);
 
-        Task Update(T entity);
+        Task UpdateAsync(T entity);
 
-        Task Delete(string id);
+        Task DeleteAsync(string id);
     }
 }

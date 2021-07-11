@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Главная";
+}
+
+@model IEnumerable<Order>
+
+<div class="container">
+    <div class="row">
+        <p class="lead text-center">
+            В работе
+        </p>
+        @foreach (var order in Model)
+        {
+            <partial name="Partials/_order" model="order" />
+        }
+    </div>
+</div>

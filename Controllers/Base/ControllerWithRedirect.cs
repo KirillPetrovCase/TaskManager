@@ -7,9 +7,9 @@ namespace TaskManager.Controllers.Base
         public IActionResult RedirectByRole(string roleName)
         {
             if (roleName == "Administrator")
-                return RedirectToAction("Index", "Admin");
+                return RedirectToAction("ActiveOrders", "Admin");
 
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("UserOrders", "User");
         }
     }
 }

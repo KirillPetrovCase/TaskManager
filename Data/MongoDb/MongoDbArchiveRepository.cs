@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TaskManager.Data.Contracts;
@@ -16,15 +15,15 @@ namespace TaskManager.Data.MongoDb
             context = Сontext;
         }
 
-        public async Task<int> GetTotalDocuments()
-            => (int)await context.CountDocumentsAsync(new BsonDocument());
-
-        public async Task<IEnumerable<ArchiveOrderRecord>> GetAllWithSortFilterPagination(string name, int page, int pageSize, SortState sortState)
+        public async Task<IEnumerable<ArchiveOrderRecord>> GetAllWithSortFilterPaginationAsync(string name, string performer, int page, int pageSize, SortState sortState)
         {
             var filter = Builders<ArchiveOrderRecord>.Filter.Empty;
 
             if (string.IsNullOrEmpty(name) is false)
-                filter = Builders<ArchiveOrderRecord>.Filter.Where(archOrder => archOrder.OwnerName.Contains(name));
+                filter &= Builders<ArchiveOrderRecord>.Filter.Where(archOrder => archOrder.OwnerName.Contains(name));
+
+            if (string.IsNullOrEmpty(performer) is false)
+                filter &= Builders<ArchiveOrderRecord>.Filter.Where(archOrder => archOrder.PerformerName.Contains(performer));
 
             var sort = sortState switch
             {

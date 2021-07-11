@@ -1,0 +1,35 @@
+﻿@model Owner
+
+<tr>
+    <th scope="row">
+        @Model.Name
+    </th>
+    <td>
+        @Model.Post
+    </td>
+    <td>
+        @Model.Placement
+    </td>
+    <td>
+        @Model.Role
+    </td>
+    <td>
+        @if (Model.Role == TaskManager.Data.Contracts.Role.Administrator)
+        {
+            <a asp-action="ChangeRoleToUser" asp-controller="Admin" asp-route-id="@Model.Id" class="btn bg-dark btn-sm  text-light">
+                Сделать пользователем
+            </a>
+        }
+        @if (Model.Role == TaskManager.Data.Contracts.Role.User)
+        {
+            <a asp-action="ChangeRoleToAdmin" asp-controller="Admin" asp-route-id="@Model.Id" class="btn bg-dark btn-sm  text-light">
+                Сделать администратором
+            </a>
+        }
+    </td>
+    <td>
+        <a asp-action="DeleteUser" asp-controller="Admin" asp-route-id="@Model.Id" class="btn bg-danger btn-sm  text-light">
+            Удалить пользователя
+        </a>
+    </td>
+</tr>

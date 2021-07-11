@@ -1,5 +1,5 @@
-﻿@if(User.Identity.IsAuthenticated){
-    <span class="badge">Авторизован как</span> 
-    <span class="badge bg-secondary">@User.FindFirst("Name").Value</span> 
+﻿<div class="d-flex">
+    <span class="badge">Авторизован как</span>
+    <span class="badge bg-secondary">@User.FindFirst("Name").Value</span>
     <a class="badge text-danger" asp-controller="Account" asp-action="LogOut">Выйти</a>
- }
+</div>

@@ -2,11 +2,13 @@
 {
     public class FilterViewModel
     {
-        public string SelectedName { get; private set; }
+        public string SelectedUser { get; private set; }
+        public string SelectedPerformer { get; private set; }
 
-        public FilterViewModel(string name)
+        public FilterViewModel(string name = "", string performer = "")
         {
-            SelectedName = name;
+            SelectedUser = name;
+            SelectedPerformer = performer;
         }
     }
 }

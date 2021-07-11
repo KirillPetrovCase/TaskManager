@@ -1,0 +1,15 @@
+﻿@model string
+
+<div class="row">
+    <div class="col"></div>
+    <div class="col-auto">
+        <a class="badge bg-danger page-link" style="width:150px;" asp-action="UnsubscribeFromOrder" asp-controller="Admin" asp-route-orderId="@Model">
+            Отказаться
+        </a>
+    </div>
+    <div class="col-auto">
+        <a class="badge bg-success page-link" style="width:150px;" asp-action="CompleteOrder" asp-controller="Admin" asp-route-orderId="@Model">
+            Завершить
+        </a>
+    </div>
+</div>

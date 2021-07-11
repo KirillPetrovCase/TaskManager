@@ -2,8 +2,8 @@
 {
     public enum OrderStatus
     {
-        Awaiting,
+        InWork,
         Completed,
-        InWork
+        Awaiting
     }
 }

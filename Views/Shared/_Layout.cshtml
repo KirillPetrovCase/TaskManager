@@ -12,9 +12,11 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-route="Default">Task Manager</a>
-                <div class="d-flex">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <partial name="_adminNav" />
                     <partial name="_authorization" />
-                </div>
+                }
             </div>
         </nav>
     </header>

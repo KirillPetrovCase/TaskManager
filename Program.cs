@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using System;
+using TaskManager.Data;
+using TaskManager.Data.MongoDb;
 
 namespace TaskManager
 {
@@ -19,7 +22,25 @@ namespace TaskManager
             try
             {
                 Log.Information("Starting web host");
-                CreateHostBuilder(args).Build().Run();
+                var host = CreateHostBuilder(args).Build();
+
+                using (var scope = host.Services.CreateScope())
+                {
+                    var services = scope.ServiceProvider;
+
+                    try
+                    {
+                        var userRepository = services.GetRequiredService<MongoDbUserRepository>();
+                        var placementRepository = services.GetRequiredService<MongoDbPlacementRepository>();
+                        SeedInitialize.InitializeAsync(userRepository, placementRepository);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message);
+                    }
+                }
+
+                host.Run();
                 return 0;
             }
             catch (Exception ex)

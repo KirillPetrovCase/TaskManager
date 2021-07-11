@@ -1,17 +1,16 @@
 ﻿@{
-    ViewData["Title"] = "Архив заявок";
+    ViewData["Title"] = "Пользователи";
 }
 
-@model TaskManager.ViewModels.Admin.ArchiveViewModel
+@model TaskManager.ViewModels.Admin.UserListViewModel
 
 <div class="container">
     <div class="row mb-4">
-        <form method="get" asp-action="OrderArchive"
-                           asp-controller="Admin" 
+        <form method="get" asp-action="UserList"
+                           asp-controller="Admin"
                            asp-route-page="@(Model.PageViewModel.CurrentPage)"
                            asp-route-pageSize="@(Model.PageViewModel.PageSize)"
                            asp-route-sortState="@(Model.SortViewModel.Current)"
-                           asp-route-performer="@(Model.FilterViewModel.SelectedPerformer)"
                            asp-route-user="@(Model.FilterViewModel.SelectedUser)">
             <div class="form-group row">
 
@@ -20,55 +19,50 @@
                     <label for="UserName">Имя пользователя</label>
                 </div>
                 <div class="col-auto form-floating">
-                    <input name="Performer" value="@Model.FilterViewModel.SelectedPerformer" id="Performer" class="form-control" />
-                    <label for="UserName">Имя исполнителя</label>
-                </div>
-                <div class="col-auto form-floating">
                     <input name="pageSize" value="@Model.PageViewModel.PageSize" id="PageSize" class="form-control" />
                     <label for="PageSize">Значений на странице</label>
                 </div>
                 <div class="col-auto">
                     <input type="submit" class="btn btn-outline-dark rounded" value="Применить фильтр" />
                 </div>
-
             </div>
         </form>
     </div>
     <div class="row">
-        <span class="lead text-center">Закрытые заявки</span>
+        <span class="lead text-center">Список пользователей</span>
     </div>
     <div class="row mb-1">
         <div class="col-auto">
-            <a asp-action="OrderArchive"
+            <a asp-action="UserList"
                asp-controller="Admin"
                asp-route-page="@(Model.PageViewModel.CurrentPage)"
                asp-route-pageSize="@(Model.PageViewModel.PageSize)"
                asp-route-sortState="@(Model.SortViewModel.NameSort)"
-               asp-route-performer="@(Model.FilterViewModel.SelectedPerformer)"
                asp-route-user="@(Model.FilterViewModel.SelectedUser)"
                class="page-link">
-                Сортировка по заказчику
-            </a>
-        </div>
-        <div class="col-auto">
-            <a asp-action="OrderArchive"
-               asp-controller="Admin"
-               asp-route-page="@(Model.PageViewModel.CurrentPage)"
-               asp-route-pageSize="@(Model.PageViewModel.PageSize)"
-               asp-route-sortState="@(Model.SortViewModel.DateSort)"
-               asp-route-performer="@(Model.FilterViewModel.SelectedPerformer)"
-               asp-route-user="@(Model.FilterViewModel.SelectedUser)"
-               class="page-link">
-                Сортировка по дате завершения
+                Сортировка по имени
             </a>
         </div>
     </div>
-
     <div class="row">
-        @foreach (ArchiveOrderRecord order in Model.Records)
-        {
-            <partial name="Partials/_orderArchive" model="order" />
-        }
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Должность</th>
+                    <th scope="col">Расположение</th>
+                    <th scope="col">Роль</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <partial name="Partials/_user" model="user" />
+                }
+            </tbody>
+        </table>
     </div>
     @{
         var prevDisabled = Model.PageViewModel.HasPrevious is false ? "disabled" : "";
@@ -76,11 +70,10 @@
     }
     <div class="row">
         <div class="col">
-            <a asp-action="OrderArchive"
+            <a asp-action="UserList"
                asp-controller="Admin"
                asp-route-page="@(Model.PageViewModel.CurrentPage - 1)"
                asp-route-pageSize="@(Model.PageViewModel.PageSize)"
-               asp-route-performer="@(Model.FilterViewModel.SelectedPerformer)"
                asp-route-user="@(Model.FilterViewModel.SelectedUser)"
                asp-route-sortState="@(Model.SortViewModel.Current)"
                class="btn btn-outline-dark btn-sm w-100 @prevDisabled">
@@ -89,11 +82,10 @@
         </div>
         <div class="col">
 
-            <a asp-action="OrderArchive"
+            <a asp-action="UserList"
                asp-controller="Admin"
                asp-route-page="@(Model.PageViewModel.CurrentPage + 1)"
                asp-route-pageSize="@(Model.PageViewModel.PageSize)"
-               asp-route-performer="@(Model.FilterViewModel.SelectedPerformer)"
                asp-route-user="@(Model.FilterViewModel.SelectedUser)"
                asp-route-sortState="@(Model.SortViewModel.Current)"
                class="btn btn-outline-dark btn-sm w-100 @nextDisabled">

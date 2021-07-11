@@ -10,11 +10,12 @@ namespace TaskManager.Extensions
 {
     public static class ModelViewModelMorphExtensions
     {
-        public static Order CreateOrder(this CreateOrderViewModel model, string ownerId)
+        public static Order CreateOrder(this CreateOrderViewModel model, string ownerId, string ownerName)
             => new()
             {
                 Description = model.Description,
                 OwnerId = ownerId,
+                OwnerName = ownerName,
                 RegisterTime = DateTime.Now,
                 Deadline = model.Deadline,
                 Status = OrderStatus.Awaiting,
@@ -22,13 +23,14 @@ namespace TaskManager.Extensions
                 NewMessageForUser = false
             };
 
-        public static User CreateUser(this RegisterViewModel model)
+        public static Owner CreateUser(this RegisterViewModel model)
             => new()
             {
                 Login = model.Login,
                 Name = model.Name,
                 HashPassword = SecurePasswordHasherService.Hash(model.Password),
                 Placement = model.Placement,
+                Post = model.Post,
                 Role = Role.User
             };
 
@@ -44,7 +46,7 @@ namespace TaskManager.Extensions
             };
 
 
-        public static ArchiveOrderRecord CreateArchiveOrder(this Order order, string ownerName)
+        public static ArchiveOrderRecord CreateArchiveOrder(this Order order)
         => new()
         {
             ArchivedTime = DateTime.Now,
@@ -52,8 +54,9 @@ namespace TaskManager.Extensions
             CompleteTime = order.CompleteTime,
             Deadline = order.Deadline,
             Description = order.Description,
-            OwnerName = ownerName,
+            OwnerName = order.OwnerName,
             OwnerId = order.OwnerId,
+            PerformerName = order.PerformerName,
             PerformerId = order.PerformerId,
             RegisterTime = order.RegisterTime
         };

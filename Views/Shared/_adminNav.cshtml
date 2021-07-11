@@ -1,0 +1,23 @@
+﻿@inject TaskManager.Data.MongoDb.MongoDbOrderRepository repository
+
+@if (User.FindFirst("Role").Value == "Administrator")
+{
+<ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Admin" asp-action="ActiveOrders">
+            В работе (@await repository.CountInWorkByIdAsync(User.FindFirst("id").Value))
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Admin" asp-action="AwaitingOrders">
+            Не принятые (@await repository.CountAwaitingsAsync())
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Admin" asp-action="OrderArchive">Архив выполненых</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Admin" asp-action="UserList">Пользователи</a>
+    </li>
+</ul>
+}

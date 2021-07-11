@@ -34,8 +34,8 @@ namespace TaskManager.Controllers
                 {
                     chat = CreateEmptyChat(orderId);
 
-                    await chatRepository.Add(chat);
-                    await orderRepository.Update(orderId, "ChatId", chatRepository.GetByOrderId(orderId).Result.Id);
+                    await chatRepository.AddAsync(chat);
+                    await orderRepository.UpdateAsync(orderId, "ChatId", chatRepository.GetByOrderId(orderId).Result.Id);
                 }
                 else
                 {
@@ -45,12 +45,12 @@ namespace TaskManager.Controllers
 
             if (User.FindFirstValue("Role") == "Administrator")
             {
-                await orderRepository.UnmarkNewMessageForAdmin(orderId);
+                await orderRepository.UnmarkNewMessageForAdminAsync(orderId);
             }
 
             if (User.FindFirstValue("Role") == "User")
             {
-                await orderRepository.UnmarkNewMessageForUser(orderId);
+                await orderRepository.UnmarkNewMessageForUserAsync(orderId);
             }
 
             return View(chat.CreateChatViewModel());
@@ -59,16 +59,18 @@ namespace TaskManager.Controllers
         [HttpPost]
         public async Task<IActionResult> SendMessage(SendMessageViewModel model)
         {
-            var message = CreateMessage(model.MessageText, User.FindFirstValue("id"));
+            var message = CreateMessage(model.MessageText, User.FindFirstValue("Name"));
+
             await chatRepository.AddMessageToChat(model.ChatId, message);
+
             if (User.FindFirstValue("Role") == "Administrator")
             {
-                await orderRepository.MarkNewMessageForUser(model.OrderId);
+                await orderRepository.MarkNewMessageForUserAsync(model.OrderId);
             }
 
             if (User.FindFirstValue("Role") == "User")
             {
-                await orderRepository.MarkNewMessageForAdmin(model.OrderId);
+                await orderRepository.MarkNewMessageForAdminAsync(model.OrderId);
             }
 
             return RedirectToAction("ActiveChat", "Message", new { orderId = model.OrderId });
@@ -76,7 +78,7 @@ namespace TaskManager.Controllers
 
         public async Task<IActionResult> ArchivedChat(string chatId)
         {
-            var chat = await chatRepository.GetById(chatId);
+            var chat = await chatRepository.GetByIdAsync(chatId);
 
             if (chat is null)
             {
@@ -87,11 +89,11 @@ namespace TaskManager.Controllers
         }
 
         private static Message CreateMessage(string messageText,
-                                      string senderId)
+                                      string name)
             => new()
             {
                 MessageText = messageText,
-                SenderId = senderId,
+                SenderName = name,
                 Time = DateTime.Now
             };
 
